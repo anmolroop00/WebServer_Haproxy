@@ -1,0 +1,30 @@
+- hosts: webserver
+  tasks:
+  - name: Installing httpd
+    package:
+            name: "httpd"
+            state: present
+  - name: Copying the webpage to the servers
+    copy:
+            src: "/var/www/html/index.html"
+            dest: "/var/www/html"
+  - name: Staring webserver
+    service:
+            name: "httpd"
+            state: started
+- hosts: loadbalancer
+  tasks:
+  - name: Installing Haproxy
+    package:
+        name: "haproxy"
+        state: present
+  - name: Copy the cfg file
+    template:
+            src: "/root/ansible_ws/task12/haproxy.cfg"
+            dest: "/etc/haproxy/haproxy.cfg"
+  - name: Starting the server
+    service:
+        name: "haproxy"
+        state: restarted
+
+
